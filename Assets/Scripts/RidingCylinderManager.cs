@@ -6,7 +6,6 @@ public class RidingCylinderManager : MonoBehaviour
 {
     [SerializeField] GameObject ridingCylinderPrefab;
     [SerializeField] float cylinderIncrementValue;
-    [SerializeField] float cylinderDecrementValue;
 
     public static RidingCylinderManager Current;
     public List<RidingCylinder> cylinders;
@@ -24,9 +23,13 @@ public class RidingCylinderManager : MonoBehaviour
             ApplyCylinderVolume(cylinderIncrementValue);
             Destroy(other.gameObject);
         }
-        else if (other.CompareTag("Trap"))
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Trap"))
         {
-            ApplyCylinderVolume(cylinderDecrementValue);
+            ApplyCylinderVolume(-Time.fixedDeltaTime);
         }
     }
 
