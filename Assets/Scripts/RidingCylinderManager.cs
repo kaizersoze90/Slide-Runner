@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RidingCylinderManager : MonoBehaviour
 {
     [SerializeField] GameObject ridingCylinderPrefab;
     [SerializeField] float cylinderIncrementValue;
+    [SerializeField] UnityEvent processGameOver;
 
     public static RidingCylinderManager Current;
     public List<RidingCylinder> cylinders;
@@ -43,7 +45,8 @@ public class RidingCylinderManager : MonoBehaviour
             }
             else
             {
-                //Gameover
+                Time.timeScale = 0;
+                processGameOver.Invoke();
             }
         }
         else

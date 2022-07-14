@@ -9,16 +9,6 @@ public class InvisibleBridgeManager : MonoBehaviour
     [SerializeField] float cylinderDecrementValue;
 
     BridgeSpawner _bridgeSpawner;
-    bool _isPaintingBridge;
-
-
-    void Update()
-    {
-        if (_isPaintingBridge)
-        {
-            StartCoroutine(nameof(PaintBridge));
-        }
-    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -30,6 +20,18 @@ public class InvisibleBridgeManager : MonoBehaviour
         {
             StopPaintingBridge();
         }
+    }
+
+    public void StartPaintingBridge(BridgeSpawner spawner)
+    {
+        _bridgeSpawner = spawner;
+
+        StartCoroutine(nameof(PaintBridge));
+    }
+
+    public void StopPaintingBridge()
+    {
+        StopCoroutine(nameof(PaintBridge));
     }
 
     IEnumerator PaintBridge()
@@ -48,20 +50,11 @@ public class InvisibleBridgeManager : MonoBehaviour
             float characterDistance = transform.position.z - _bridgeSpawner.startReference.position.z;
             characterDistance = Mathf.Clamp(characterDistance, 0, distance);
 
-
+            Vector3 paintingPosition = _bridgeSpawner.startReference.position + direction * characterDistance;
+            paintingPosition = new Vector3(transform.position.x, -0.3f, paintingPosition.z);
+            paintedBridge.transform.position = paintingPosition;
 
             yield return new WaitForSeconds(paintTimer);
         }
-    }
-
-    public void StartPaintingBridge(BridgeSpawner spawner)
-    {
-        _bridgeSpawner = spawner;
-        _isPaintingBridge = true;
-    }
-
-    public void StopPaintingBridge()
-    {
-        _isPaintingBridge = false;
     }
 }
