@@ -16,10 +16,11 @@ public class RidingCylinder : MonoBehaviour
         _cyclinderCount = RidingCylinderManager.Current.cylinders.Count;
     }
 
-    public void IncrementCylinderVolume(float value)
+    public void AdjustCylinderVolume(float value)
     {
         _value += value;
 
+        //If cylinder is already full, create another with surplus value
         if (_value > 1)
         {
             float surplusValue = _value - 1;
@@ -28,10 +29,14 @@ public class RidingCylinder : MonoBehaviour
 
             AdjustFilledCylinder();
         }
+
+        //If the value reduces cylinder volume until its become empty, destroy game object
         else if (_value < 0)
         {
             _manager.DestroyCylinder(this);
         }
+
+        //Adjust volume for suitable cylinder
         else
         {
             AdjustUnfilledCyclinder();

@@ -8,6 +8,8 @@ TagManager:
   - Trap
   - StartBridge
   - EndBridge
+  - FinishLine
+  - Prize
   layers:
   - Default
   - TransparentFX

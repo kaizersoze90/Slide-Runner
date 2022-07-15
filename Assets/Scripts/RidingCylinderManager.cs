@@ -5,25 +5,38 @@ using UnityEngine.Events;
 
 public class RidingCylinderManager : MonoBehaviour
 {
+    [Header("General Settings")]
     [SerializeField] GameObject ridingCylinderPrefab;
     [SerializeField] float cylinderIncrementValue;
+
+    [Header("Other Settings")]
     [SerializeField] UnityEvent processGameOver;
+    [SerializeField] UnityEvent processYouWin;
+    [SerializeField] AudioClip pickupSFX;
 
+    [HideInInspector] public List<RidingCylinder> cylinders;
     public static RidingCylinderManager Current;
-    public List<RidingCylinder> cylinders;
 
-    void Start()
+    PlayerController _playerController;
+    bool _isFinishPassed;
+
+    void Awake()
     {
         Current = this;
+        _playerController = GetComponent<PlayerController>();
     }
-
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Cylinder"))
         {
-            ApplyCylinderVolume(cylinderIncrementValue);
+            ManageCylinderVolume(cylinderIncrementValue);
+            AudioSource.PlayClipAtPoint(pickupSFX, transform.position);
             Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("FinishLine"))
+        {
+            _isFinishPassed = true;
         }
     }
 
@@ -31,11 +44,11 @@ public class RidingCylinderManager : MonoBehaviour
     {
         if (other.CompareTag("Trap"))
         {
-            ApplyCylinderVolume(-Time.fixedDeltaTime);
+            ManageCylinderVolume(-Time.fixedDeltaTime);
         }
     }
 
-    public void ApplyCylinderVolume(float value)
+    public void ManageCylinderVolume(float value)
     {
         if (cylinders.Count == 0)
         {
@@ -45,16 +58,22 @@ public class RidingCylinderManager : MonoBehaviour
             }
             else
             {
-                Time.timeScale = 0;
-                processGameOver.Invoke();
+                if (_isFinishPassed)
+                {
+                    _playerController.canMove = false;
+                    processYouWin.Invoke();
+                }
+                else
+                {
+                    Time.timeScale = 0;
+                    processGameOver.Invoke();
+                }
             }
         }
         else
         {
-            cylinders[cylinders.Count - 1].IncrementCylinderVolume(value);
+            cylinders[cylinders.Count - 1].AdjustCylinderVolume(value);
         }
-
-
     }
 
     public void CreateCyclinder(float value)
@@ -62,7 +81,7 @@ public class RidingCylinderManager : MonoBehaviour
         RidingCylinder createdCyclinder = Instantiate(ridingCylinderPrefab, transform)
                                           .GetComponent<RidingCylinder>();
         cylinders.Add(createdCyclinder);
-        createdCyclinder.IncrementCylinderVolume(value);
+        createdCyclinder.AdjustCylinderVolume(value);
     }
 
     public void DestroyCylinder(RidingCylinder cylinder)

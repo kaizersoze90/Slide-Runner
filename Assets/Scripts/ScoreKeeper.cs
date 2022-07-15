@@ -5,15 +5,11 @@ using UnityEngine;
 
 public class ScoreKeeper : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI scoreText;
+    [Tooltip("Enter score value per cylinder pickup")]
     [SerializeField] int scoreValue;
 
-    int _score;
-
-    void Update()
-    {
-        scoreText.text = _score.ToString("00000");
-    }
+    [HideInInspector] public int _score;
+    [HideInInspector] public int _prizeMultiplier = 1;
 
     void OnTriggerEnter(Collider other)
     {
@@ -21,10 +17,15 @@ public class ScoreKeeper : MonoBehaviour
         {
             _score += scoreValue;
         }
+        else if (other.CompareTag("Prize"))
+        {
+            _prizeMultiplier = other.GetComponent<PrizeMultiplier>().value;
+        }
     }
 
     public int GetScore()
     {
-        return _score;
+        int lastScore = _score * _prizeMultiplier;
+        return lastScore;
     }
 }

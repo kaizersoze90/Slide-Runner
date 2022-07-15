@@ -5,10 +5,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Controller Settings")]
     [SerializeField] float runningSpeed;
     [SerializeField] float turnSpeed;
     [SerializeField] float touchSensitivity;
     [SerializeField] float screenLimitX;
+
+    public bool canMove = true;
 
     float _currentSpeed;
     float _newPositionX;
@@ -20,8 +23,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        ProcessMove();
-        ProcessTouch();
+        if (canMove)
+        {
+            ProcessTouch();
+            ProcessMove();
+        }
     }
 
     void ProcessMove()
@@ -40,7 +46,6 @@ public class PlayerController : MonoBehaviour
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
         {
             touchDeltaX = Input.GetTouch(0).deltaPosition.x / touchSensitivity;
-
         }
         else if (Input.GetMouseButton(0))
         {
