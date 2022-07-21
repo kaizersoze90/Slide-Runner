@@ -26,7 +26,7 @@ public class PlayerAnimationController : MonoBehaviour
         }
 
         //Play dancing animation when player wins
-        if (!_playerController.canMove)
+        if (!_playerController.isGameActive)
         {
             _animator.SetBool("isDancing", true);
         }

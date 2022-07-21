@@ -43,7 +43,7 @@ public class InvisibleBridgeManager : MonoBehaviour
 
     IEnumerator PaintBridge()
     {
-        while (_playerController.canMove)
+        while (_playerController.isGameActive)
         {
             //Reduce riding cylinder volume while on invisible bridge
             RidingCylinderManager.Current.ManageCylinderVolume(cylinderDecrementValue);

@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float touchSensitivity;
     [SerializeField] float screenLimitX;
 
-    public bool canMove = true;
+    public bool isGameActive = true;
 
     float _currentSpeed;
     float _newPositionX;
@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (canMove)
+        if (isGameActive)
         {
             ProcessTouch();
             ProcessMove();

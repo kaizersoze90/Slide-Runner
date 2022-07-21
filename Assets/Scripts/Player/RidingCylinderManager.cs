@@ -60,7 +60,7 @@ public class RidingCylinderManager : MonoBehaviour
             {
                 if (_isFinishPassed)
                 {
-                    _playerController.canMove = false;
+                    _playerController.isGameActive = false;
                     processYouWin.Invoke();
                 }
                 else

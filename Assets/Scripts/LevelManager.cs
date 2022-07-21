@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -10,11 +11,12 @@ public class LevelManager : MonoBehaviour
 
     float _maxDistance;
     float _distance;
+    int _currentLevel;
 
-
-    void Start()
+    void Awake()
     {
         _maxDistance = finishLine.position.z - player.transform.position.z;
+        _currentLevel = SceneManager.GetActiveScene().buildIndex;
     }
 
     void Update()
@@ -25,5 +27,10 @@ public class LevelManager : MonoBehaviour
     public float LevelProgress()
     {
         return _distance / _maxDistance;
+    }
+
+    public int CurrentLevel()
+    {
+        return _currentLevel;
     }
 }

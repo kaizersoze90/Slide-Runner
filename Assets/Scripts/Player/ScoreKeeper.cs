@@ -11,6 +11,22 @@ public class ScoreKeeper : MonoBehaviour
     [HideInInspector] public int _score;
     [HideInInspector] public int _prizeMultiplier = 1;
 
+    PlayerController _playerController;
+
+    int _lastScore;
+    int _currentScore;
+
+    void Awake()
+    {
+        _playerController = GetComponent<PlayerController>();
+    }
+
+    void Start()
+    {
+        _lastScore = PlayerPrefs.GetInt("LastScore");
+        _score = _lastScore;
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Cylinder"))
@@ -25,7 +41,19 @@ public class ScoreKeeper : MonoBehaviour
 
     public int GetScore()
     {
-        int lastScore = _score * _prizeMultiplier;
-        return lastScore;
+        _currentScore = _score * _prizeMultiplier;
+        return _currentScore;
+    }
+
+    public int GetLastScore()
+    {
+        _lastScore = _score * _prizeMultiplier;
+        PlayerPrefs.SetInt("LastScore", _lastScore);
+        return _lastScore;
+    }
+
+    public void ResetLastScore()
+    {
+        PlayerPrefs.SetInt("LastScore", 0);
     }
 }
